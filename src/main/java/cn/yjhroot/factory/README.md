@@ -22,6 +22,6 @@
 
 ## 详细信息
 
-1. [简单工厂模式](./simplefactory/README.md)
-2. [工厂方法模式](./factory/README.md)
-3. [抽象工厂模式](./abstractfactory/README.md)
+1. [简单工厂模式](./simplefactory)
+2. [工厂方法模式](./factory)
+3. [抽象工厂模式](./abstractfactory)
