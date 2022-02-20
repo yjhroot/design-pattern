@@ -10,7 +10,7 @@
 
 ## 实现步骤
 
-1. 创建一个需要拷贝的原型类prototype（如：Mail），重写其父类Object的clone方法
+1. 创建一个需要拷贝的原型类prototype（如：Mail），实现Cloneable接口，重写其父类Object的clone方法
 2. 为原型类创建子类，完成相应的业务
 3. 当需要克隆对象时，使用对象的clone()方法进行克隆
 
