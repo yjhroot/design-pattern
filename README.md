@@ -16,3 +16,4 @@
 8. [外观模式](./src/main/java/cn/yjhroot/facade)
 9. [桥接模式](./src/main/java/cn/yjhroot/bridge)
 10. [组合模式](./src/main/java/cn/yjhroot/composite)
+11. [享元模式](./src/main/java/cn/yjhroot/flyweight)
