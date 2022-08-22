@@ -15,7 +15,7 @@ public class Request {
     /**
      * 构造方法（设置请求等级）
      *
-     * @param level 水平
+     * @param level 等级
      */
     public Request(Level level) {
         this.level = level;
