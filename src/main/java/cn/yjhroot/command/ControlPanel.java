@@ -13,7 +13,7 @@ public class ControlPanel {
     private Command command;
 
     /**
-     * 构造方法（初始化命令）
+     * 设置命令方法
      *
      * @param command 下一曲命令
      */
