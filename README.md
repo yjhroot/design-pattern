@@ -2,7 +2,7 @@
 
 ## 文章地址
 
-[整理23种设计模式【更新中。。。】](https://blog.csdn.net/achacker/article/details/126378416)
+[23种设计模式](https://blog.csdn.net/achacker/article/details/126378416)
 
 ## 目录
 
