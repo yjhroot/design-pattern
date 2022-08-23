@@ -24,3 +24,4 @@
 16. [责任链模式](./src/main/java/cn/yjhroot/chain)
 17. [命令模式](./src/main/java/cn/yjhroot/command)
 18. [状态模式](./src/main/java/cn/yjhroot/state)
+19. [备忘录模式](./src/main/java/cn/yjhroot/memento)
