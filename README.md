@@ -26,3 +26,4 @@
 18. [状态模式](./src/main/java/cn/yjhroot/state)
 19. [备忘录模式](./src/main/java/cn/yjhroot/memento)
 20. [访问者模式](./src/main/java/cn/yjhroot/visitor)
+21. [中介者模式](./src/main/java/cn/yjhroot/mediator)
