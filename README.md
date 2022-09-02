@@ -27,6 +27,7 @@
 19. [备忘录模式](./src/main/java/cn/yjhroot/memento)
 20. [访问者模式](./src/main/java/cn/yjhroot/visitor)
 21. [中介者模式](./src/main/java/cn/yjhroot/mediator)
+22. [解释器模式](./src/main/java/cn/yjhroot/interpreter)
 
 ---
 
@@ -4452,4 +4453,213 @@ public class TestClass {
 
 # 二十三、解释器模式
 
-这个模式就不整理了，感觉一辈子用不到，还很复杂，就忽略了！
+## 定义
+
+给定一个语言，定义它的文法得一种表示，并定义一个解释器，这个解释器使用该表示来解释语言中的句子。
+
+## 针对问题
+
+需要自定义一些描述语言并得到解释的场景下使用。比如：工作流的解释，通过自定义工作流图，根据工作节点类型，节点间的关系，解释程序应该怎样运行。
+
+## 实现步骤
+
+1. 创建上下文环境类Context，维护一些公共信息，如当前环境下某个符号代表什么含义，或提供一些公有操作方法等。
+2. 创建表达式接口，提供解释方法。
+3. 为上述接口提供两种不同的实现抽象类，分别是端点表达式抽象类和非端点表达式抽象类。端点表达式抽象类可看作叶子节点，存放一些值，非端点表达式抽象类用于链接多个端点表达式并指定之间的关系。
+4. 为上述两个抽象类分别创建子类，实现父类接口方法。
+5. 创建环境对象，设置当前环境下的一些语义文法等信息。
+6. 调用环境对象提供的解释方法，实现某些语法在当前环境下的解释工作。
+
+## 优缺点
+
+1. 优点：能够自定义文法，比较灵活。
+2. 缺点：实现复杂，执行效率低，逻辑复杂。现代编程环境中，除特殊需求外，很少使用。
+
+## UML类图
+
+![解释器模式类图](https://img-blog.csdnimg.cn/dcf72f27ed6047b3b69ade31a290ce7b.png#pic_center)
+
+## 实现代码
+
+```java
+/**
+ * 上下文类（存放当前环境下的一些公共信息
+ * 当前demo中 存放的是端点表达式子类代表的意思 如”i“代表”我“
+ * 也可以存放非端点表达式代表子类的一些信息 比如"."代表"爱" 此处为演示方便 没存
+ * 同时 也可以放一些解释方法等）
+ *
+ * @author YuJianHui
+ * @date 2022/09/02
+ */
+public class Context {
+    /**
+     * 端点表达式解释信息
+     */
+    private final Map<String, String> map = new HashMap<String, String>();
+
+    /**
+     * 设置表达式含义
+     *
+     * @param key   键
+     * @param value 含义
+     */
+    public void setExpression(String key, String value) {
+        map.put(key, value);
+    }
+
+    /**
+     * 通过键 获取表达式含义
+     *
+     * @param key 关键
+     * @return {@link String}
+     */
+    public String getValueByKey(String key) {
+        return map.get(key);
+    }
+
+    /**
+     * 翻译方法
+     *
+     * @param description 描述
+     * @return {@link String} 根据描述得到的翻译
+     */
+    public String translate(String description) {
+        // demo为了简化 直接解释了”.“用PointExpression类对象来解释 实际项目中 不同的表达式需要使用不同的表达式类来解释
+        String[] strArray = description.split("\\.");
+        Expression value1 = new ValueExpression(strArray[0]);
+        Expression value2 = new ValueExpression(strArray[1]);
+        return new PointExpression(value1, value2).interpreter(this);
+    }
+}
+```
+
+```java
+/**
+ * 表达式接口
+ *
+ * @author YuJianHui
+ * @date 2022/09/02
+ */
+public interface Expression {
+    /**
+     * 解释方法
+     *
+     * @param context 上下文对象
+     * @return {@link String}
+     */
+    String interpreter(Context context);
+}
+
+/**
+ * 端点表达式抽象类
+ *
+ * @author YuJianHui
+ * @date 2022/09/02
+ */
+public abstract class TerminalExpression implements Expression {
+    /**
+     * 键
+     */
+    final String key;
+
+    /**
+     * 构造方法（设置键 用于在Context中查找对应值）
+     *
+     * @param key 关键
+     */
+    public TerminalExpression(String key) {
+        this.key = key.trim();
+    }
+}
+
+/**
+ * 非端点表达式抽象类
+ *
+ * @author YuJianHui
+ * @date 2022/09/02
+ */
+public abstract class NonTerminalExpression implements Expression {
+    /**
+     * 端点表达式子类对象1
+     */
+    final Expression e1;
+    /**
+     * 端点表达式子类对象2
+     */
+    final Expression e2;
+
+    /**
+     * 构造方法（初始化端点表达式子类）
+     *
+     * @param e1 端点表达式子类对象1
+     * @param e2 端点表达式子类对象2
+     */
+    protected NonTerminalExpression(Expression e1, Expression e2) {
+        this.e1 = e1;
+        this.e2 = e2;
+    }
+}
+
+/**
+ * 值表达式类
+ *
+ * @author YuJianHui
+ * @date 2022/09/02
+ */
+public class ValueExpression extends TerminalExpression {
+    /**
+     * 构造方法
+     *
+     * @param key 键
+     */
+    public ValueExpression(String key) {
+        super(key);
+    }
+
+    @Override
+    public String interpreter(Context context) {
+        return context.getValueByKey(key);
+    }
+}
+
+/**
+ * 点表达式类
+ *
+ * @author YuJianHui
+ * @date 2022/09/02
+ */
+public class PointExpression extends NonTerminalExpression {
+    /**
+     * 构造方法
+     *
+     * @param e1 端点表达式对象1
+     * @param e2 端点表达式对象2
+     */
+    protected PointExpression(Expression e1, Expression e2) {
+        super(e1, e2);
+    }
+
+    @Override
+    public String interpreter(Context context) {
+        // 将”.“翻译成”爱“ 并链接两个端点表达式
+        return e1.interpreter(context) + "爱" + e2.interpreter(context);
+    }
+}
+```
+
+```java
+public class TestClass {
+    public static void main(String[] args) {
+        // 创建环境对象
+        Context context = new Context();
+        // 设置当前环境下 不同的符号代表的意思
+        context.setExpression("i", "我");
+        context.setExpression("you", "你");
+
+        // 调用当前环境对语句进行解释
+        System.out.println("i.you" + " 解释为=》 " + context.translate("i.you"));
+    }
+}
+------输出------
+        i.you 解释为=》 我爱你
+```
